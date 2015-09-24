@@ -19,6 +19,7 @@ module.exports = Geocoder;
 
 // Initialize and load Geocoder, with a selection of indexes.
 function Geocoder(options) {
+    console.log("instantiated")
     if (!options) throw new Error('Geocoder options required.');
 
     var q = queue(),
