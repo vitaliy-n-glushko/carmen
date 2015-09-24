@@ -3,6 +3,7 @@ var path = require('path'),
     queue = require('queue-async');
 
 var Cache = require('./lib/util/cxxcache'),
+    MPCache = require('./lib/util/mpcache.js'),
     getContext = require('./lib/context'),
     loader = require('./lib/loader'),
     geocode = require('./lib/geocode'),
@@ -42,17 +43,20 @@ function Geocoder(options) {
                 names.push(name);
                 this.byname[name] = [];
             }
-            source._geocoder = source._geocoder || new Cache(name, info.geocoder_cachesize);
+            var geocoder_address;
 
             if (!info.geocoder_address || typeof info.geocoder_address === "number" || info.geocoder_address.toString().match(/^\d$/)) {
-                source._geocoder.geocoder_address = !!parseInt(info.geocoder_address||0,10);
+                geocoder_address = !!parseInt(info.geocoder_address||0,10);
             } else {
                 if (info.geocoder_address.indexOf('{name}') !== -1 && info.geocoder_address.indexOf('{num}') !== -1) {
-                    source._geocoder.geocoder_address = info.geocoder_address;
+                    geocoder_address = info.geocoder_address;
                 } else {
-                    source._geocoder.geocoder_address = false;
+                    geocoder_address = false;
                 }
             }
+
+            source._geocoder = source._geocoder || (process.env['CARMEN_USE_MP'] ? new MPCache(name, info.geocoder_cachesize, source, geocoder_address) : new Cache(name, info.geocoder_cachesize));
+            source._geocoder.geocoder_address = geocoder_address;
 
             if (info.geocoder_version) {
                 source._geocoder.version = parseInt(info.geocoder_version, 10);

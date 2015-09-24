@@ -17,6 +17,9 @@ if (nogrids) console.log('Indexing without grids.');
 
 console.log('Indexing %s ...', f);
 
+// pass the multiprocess-ness by environmental variable for now because adding more stuff to the options hash freaks out carmen
+process.env['CARMEN_USE_MP'] = 1;
+
 var from = Carmen.auto(f);
 var to = t ? Carmen.auto(t) : from;
 var carmen = new Carmen({ from: from, to: to });
