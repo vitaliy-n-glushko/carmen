@@ -4,13 +4,14 @@ var Carmen = require('..');
 var index = require('../lib/index');
 var phrasematch = require('../lib/phrasematch');
 var mem = require('../lib/api-mem');
+var argv = require('minimist')(process.argv.slice(2));
 
 var conf = { street: new mem({ maxzoom:14, geocoder_shardlevel:2 }, function() {}) };
 var c = new Carmen(conf);
 
 module.exports = setup;
 
-function setup(cb) {
+function setup(minSample, cb) {
     if (!cb) cb = function(){};
     console.log('# phrasematch');
 
@@ -44,12 +45,12 @@ function setup(cb) {
         index.store(conf.street, function(err) {
             if (err) throw err;
             console.log('setup time ' + (+new Date - start) + 'ms');
-            runphrasematch(cb);
+            runphrasematch(minSample, cb);
         });
     });
 }
 
-function runphrasematch(cb) {
+function runphrasematch(minSample, cb) {
     suite.add('phrasematch', {
         'defer': true,
         'fn': function(deferred) {
@@ -60,7 +61,8 @@ function runphrasematch(cb) {
                     deferred.resolve();
                 }
             });
-        }
+        },
+        'minSamples': minSample
     })
     .on('complete', function(event) {
         console.log(String(event.target), '\n');
@@ -70,4 +72,4 @@ function runphrasematch(cb) {
     .run({'async': true});
 }
 
-if (!process.env.runSuite) setup();
+if (!process.env.runSuite) setup(argv.minSample || 100);

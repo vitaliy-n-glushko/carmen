@@ -8,6 +8,7 @@ var pointDoc = require('./fixtures/point-doc.json');
 var freq = index.generateFrequency(docs, {});
 var zoom = 6;
 var pointDocs = [];
+var argv = require('minimist')(process.argv.slice(2));
 
 for(var i = 0; i < 500; i++) {
     pointDocs.push(pointDoc);
@@ -15,7 +16,7 @@ for(var i = 0; i < 500; i++) {
 
 module.exports = benchmark;
 
-function benchmark(cb) {
+function benchmark(minSample, cb) {
   if (!cb) cb = function(){};
   console.log('# index.indexdocs');
   suite.add('index many', {
@@ -24,7 +25,8 @@ function benchmark(cb) {
       indexdocs(docs, freq, zoom, {}, function(err, res){
         deferred.resolve();
       });
-    }
+    },
+    'minSamples': minSample
   })
   .add('index large polygon', {
     'defer': true,
@@ -32,7 +34,8 @@ function benchmark(cb) {
       indexdocs([docs[4]], freq, zoom, {}, function(err, res){
         deferred.resolve();
       });
-    }
+    },
+    'minSamples': minSample
   })
   .add('index small polygon', {
     'defer': true,
@@ -40,7 +43,8 @@ function benchmark(cb) {
       indexdocs([docs[16]], freq, zoom, {}, function(err, res){
         deferred.resolve();
       });
-    }
+    },
+    'minSamples': minSample
   })
   .add('index point doc', {
     'defer': true,
@@ -48,7 +52,8 @@ function benchmark(cb) {
       indexdocs([pointDoc], freq, zoom, {}, function(err, res){
         deferred.resolve();
       });
-    }
+    },
+    'minSamples': minSample
   })
   .add('index many point docs', {
     'defer': true,
@@ -57,7 +62,8 @@ function benchmark(cb) {
           deferred.resolve();
           indexdocs.teardown();
       });
-    }
+    },
+    'minSamples': minSample
   })
   .on('complete', function(event) {
     suite.forEach(function(e) {
@@ -73,4 +79,4 @@ function benchmark(cb) {
   .run({'async': true});
 }
 
-if (!process.env.runSuite) benchmark();
+if (!process.env.runSuite) benchmark(argv.minSample || 100);

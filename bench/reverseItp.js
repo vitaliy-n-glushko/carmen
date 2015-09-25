@@ -6,7 +6,7 @@ var bytes = require('bytes');
 
 module.exports = benchmark;
 
-function benchmark(cb) {
+function benchmark(minSample, cb) {
     if (!cb) cb = function(){};
     console.log('# address.reverse');
 
@@ -36,4 +36,4 @@ function benchmark(cb) {
     cb();
 }
 
-if (!process.env.runSuite) benchmark();
+if (!process.env.runSuite) benchmark(null);

@@ -4,13 +4,14 @@ var Carmen = require('..');
 var index = require('../lib/index');
 var phrasematch = require('../lib/phrasematch');
 var mem = require('../lib/api-mem');
+var argv = require('minimist')(process.argv.slice(2));
 
 var conf = { street: new mem({ maxzoom:14, geocoder_shardlevel:2 }, function() {}) };
 var c = new Carmen(conf);
 
 module.exports = setup;
 
-function setup(cb) {
+function setup(minSample, cb) {
     if (!cb) cb = function(){};
     console.log('# geocode');
     var start = +new Date;
@@ -43,15 +44,16 @@ function setup(cb) {
         index.store(conf.street, function(err) {
             if (err) throw err;
             console.log('setup time ' + (+new Date - start) + 'ms');
-            runBenchmark(cb);
+            runBenchmark(minSample, cb);
         });
     });
 }
 
-function runBenchmark(cb) {
+function runBenchmark(minSample, cb) {
     suite.add('geocode', {
         'defer': true,
-        'fn': geocode
+        'fn': geocode,
+        'minSamples': minSample
     })
     .on('complete', function(event) {
         console.log(String(event.target), '\n');
@@ -68,4 +70,4 @@ function geocode(deferred) {
     });
 }
 
-if (!process.env.runSuite) setup();
+if (!process.env.runSuite) setup(argv.minSample || 100);

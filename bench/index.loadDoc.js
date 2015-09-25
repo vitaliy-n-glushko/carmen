@@ -1,6 +1,7 @@
 var suite = new (require('benchmark').Suite)();
 var assert = require('assert');
 var worker = require('../lib/indexer/indexdocs-worker.js');
+var argv = require('minimist')(process.argv.slice(2));
 
 var patch = { grid:{}, docs:[] };
 var doc = require('./fixtures/verifymatch.verifyFeatures.loaded.json')[0];
@@ -11,13 +12,13 @@ var token_replacer = [];
 
 module.exports = benchmark;
 
-function benchmark(cb) {
+function benchmark(minSample, cb) {
     if (!cb) cb = function(){};
     console.log('# index.loadDoc');
 
     suite.add('loadDoc', function() {
         worker.loadDoc(patch, doc, freq, zoom, token_replacer);
-    })
+    }, { 'minSamples': minSample })
     .on('cycle', function(event) {
         console.log(String(event.target));
     })
@@ -28,4 +29,4 @@ function benchmark(cb) {
     .run();
 }
 
-if (!process.env.runSuite) benchmark();
+if (!process.env.runSuite) benchmark(argv.minSample || 100);

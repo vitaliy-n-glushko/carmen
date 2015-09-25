@@ -6,10 +6,11 @@ var spatial = require('./fixtures/verifymatch.verifyFeatures.spatial.json');
 var tokens = require('./fixtures/tokens.json');
 var token = require('../lib/util/token');
 var replacer = token.createReplacer(tokens);
+var argv = require('minimist')(process.argv.slice(2));
 
 module.exports = benchmark;
 
-function benchmark(cb) {
+function benchmark(minSample, cb) {
     if (!cb) cb = function(){};
     console.log('# verifymatch.verifyFeatures');
 
@@ -33,7 +34,7 @@ function benchmark(cb) {
             limit_verify: 10
         };
         verifymatch.verifyFeatures(query, geocoder, spatial, l, options);
-    })
+    }, { 'minSamples': minSample })
     .on('cycle', function(event) {
         console.log(String(event.target));
     })
@@ -44,4 +45,4 @@ function benchmark(cb) {
     .run();
 }
 
-if (!process.env.runSuite) benchmark();
+if (!process.env.runSuite) benchmark(argv.minSample || 100);
