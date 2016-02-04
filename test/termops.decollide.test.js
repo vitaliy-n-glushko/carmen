@@ -52,6 +52,21 @@ test('termops.decollide', function(assert) {
         properties: { 'carmen:text': 'United States', 'carmen:text_es': 'Estados Unidos' }
     }, 'Estados Unidos'), true, 'decollides - localization');
 
+    // Works
+    assert.deepEqual(termops.decollide([
+        { from: /(\W|^)Street(\W|$)/gi, to: '$1St$2' },
+    ], {
+        properties: { 'carmen:text': 'Aarthy Street' }
+    }, 'Aarthy St'), true, 'decollides (token replacement + expanded)');
+
+    // Currently fails because decollide is only considering the letters in
+    // ['Aarthy St'] instead of both ['Aarthy St', 'Aarthy Street']
+    assert.deepEqual(termops.decollide([
+        { from: /(\W|^)Street(\W|$)/gi, to: '$1St$2' },
+    ], {
+        properties: { 'carmen:text': 'Aarthy Street' }
+    }, 'Aarthy Stree'), true, 'decollides (token replacement + expanded)');
+
     assert.end();
 });
 
