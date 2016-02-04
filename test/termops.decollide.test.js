@@ -56,16 +56,16 @@ test('termops.decollide', function(assert) {
     assert.deepEqual(termops.decollide([
         { from: /(\W|^)Street(\W|$)/gi, to: '$1St$2' },
     ], {
-        properties: { 'carmen:text': 'Aarthy Street' }
-    }, 'Aarthy St'), true, 'decollides (token replacement + expanded)');
+        properties: { 'carmen:text': 'Main Street' }
+    }, 'Main St'), true, 'decollides (token replacement + expanded)');
 
     // Currently fails because decollide is only considering the letters in
-    // ['Aarthy St'] instead of both ['Aarthy St', 'Aarthy Street']
+    // ['Main St'] instead of both ['Main St', 'Main Street']
     assert.deepEqual(termops.decollide([
         { from: /(\W|^)Street(\W|$)/gi, to: '$1St$2' },
     ], {
-        properties: { 'carmen:text': 'Aarthy Street' }
-    }, 'Aarthy Stree'), true, 'decollides (token replacement + expanded)');
+        properties: { 'carmen:text': 'Main Street' }
+    }, 'Main Stree'), true, 'decollides (token replacement + expanded)');
 
     assert.end();
 });

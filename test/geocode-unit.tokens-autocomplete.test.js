@@ -18,31 +18,31 @@ var conf = {
     }, function() {})
 };
 var c = new Carmen(conf);
-tape('index Aarthy Street', function(t) {
+tape('index Main Street', function(t) {
     addFeature(conf.test, {
         id:1,
         properties: {
-            'carmen:text':'Aarthy Street',
+            'carmen:text':'Main Street',
             'carmen:zxy':['6/32/32'],
             'carmen:center':[0,0]
         }
     }, t.end);
 });
-tape('Aarthy St => Aarthy Street', function(t) {
-    c.geocode('Aarthy St', { limit_verify:1 }, function(err, res) {
-        t.deepEqual(res.features[0].place_name, 'Aarthy Street');
+tape('Main St => Main Street', function(t) {
+    c.geocode('Main St', { limit_verify:1 }, function(err, res) {
+        t.deepEqual(res.features[0].place_name, 'Main Street');
         t.end();
     });
 });
-tape('Aarthy Street => Aarthy Street', function(t) {
-    c.geocode('Aarthy Street', { limit_verify:1 }, function(err, res) {
-        t.deepEqual(res.features[0].place_name, 'Aarthy Street');
+tape('Main Street => Main Street', function(t) {
+    c.geocode('Main Street', { limit_verify:1 }, function(err, res) {
+        t.deepEqual(res.features[0].place_name, 'Main Street');
         t.end();
     });
 });
-tape('Aarthy Stree => Aarthy Street', function(t) {
-    c.geocode('Aarthy Stree', { limit_verify:1 }, function(err, res) {
-        t.deepEqual(res.features[0].place_name, 'Aarthy Street');
+tape('Main Stree => Main Street', function(t) {
+    c.geocode('Main Stree', { limit_verify:1 }, function(err, res) {
+        t.deepEqual(res.features[0].place_name, 'Main Street');
         t.end();
     });
 });
