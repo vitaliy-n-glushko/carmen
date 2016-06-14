@@ -1,6 +1,5 @@
 var termops = require('../lib/util/termops');
 var test = require('tape');
-var clone = function(d) { return JSON.parse(JSON.stringify(d)); }
 var token = require('../lib/util/token');
 
 test('termops.replaceTokenPermutations', function(assert) {
