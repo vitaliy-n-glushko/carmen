@@ -21,16 +21,15 @@ test('3 tokens - all match', function(assert) {
     assert.end();
 });
 
-test('4 tokens - one does not match', function(assert) {
-    var replacer = token.createReplacer({'Street':'St', 'North':'N', 'Main':'Mn', 'Thirteenth':'13th', "(?<number>2\\d+)": "###${number}###"});
-    assert.deepEqual(termops.replaceTokenPermutations(replacer, '123 North Main Street', [
-        'North Main Street',
-        'N Main Street',
-        'North Main St',
-        'N Main St',
-        'North Mn St',
-        'N Mn St',
-        'N Mn Street']
-    ));
+test('filter tokens', function(assert) {
+    var tokens = token.createReplacer(
+        {'Street':'St',
+         'North':'N',
+         'Main':'Mn',
+         'Thirteenth':'13th',
+         "(?<number>2\\d+)": "###${number}###"
+        });
+    assert.deepEqual(JSON.stringify(token.tokenReplacerFilter(tokens, '243 North Main Street')), '[{"named":false,"from":{},"to":"$1St$2"},{"named":false,"from":{},"to":"$1N$2"},{"named":false,"from":{},"to":"$1Mn$2"},{"named":true,"from":{"xregexp":{"captureNames":["tokenBeginning","number","tokenEnding"],"source":"(?<tokenBeginning>\\\\W|^)(?<number>2\\\\d+)(?<tokenEnding>\\\\W|$)","flags":"gi"}},"to":"${tokenBeginning}###${number}###${tokenEnding}"}]');
+
     assert.end();
 });
