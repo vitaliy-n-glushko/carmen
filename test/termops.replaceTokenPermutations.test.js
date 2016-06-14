@@ -4,26 +4,20 @@ var token = require('../lib/util/token');
 
 test('2 tokens - all match', function(assert) {
     var replacer = token.createReplacer({'Street':'St', 'North':'N'});
-    assert.deepEqual(termops.replaceTokenPermutations(replacer, 'North Main Street', [
-        'North Main Street',
-        'N Main Street',
-        'North Main St',
-        'N Main St']
-    ));
+    assert.deepEqual(termops.replaceTokenPermutations(replacer, 'North Main Street'), ['North Main Street', 'N Main St', 'North Main St', 'N Main Street']
+    );
     assert.end();
 });
 
 test('3 tokens - all match', function(assert) {
     var replacer = token.createReplacer({'Street':'St', 'North':'N', 'Main':'Mn'});
-    assert.deepEqual(termops.replaceTokenPermutations(replacer, 'North Main Street', [
-        'North Main Street',
-        'N Main Street',
-        'North Main St',
-        'N Main St',
-        'North Mn St',
-        'N Mn St',
-        'N Mn Street']
-    ));
+    assert.deepEqual(termops.replaceTokenPermutations(replacer, 'North Main Street'), ['North Main Street',
+         'N Mn St',
+         'N Main St',
+         'N Mn Street',
+         'North Main St',
+         'N Main Street',
+         'North Mn Street']);
     assert.end();
 });
 
