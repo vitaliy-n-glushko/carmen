@@ -11,13 +11,68 @@ test('2 tokens - all match', function(assert) {
 
 test('3 tokens - all match', function(assert) {
     var replacer = token.createReplacer({'Street':'St', 'North':'N', 'Main':'Mn'});
-    assert.deepEqual(termops.replaceTokenPermutations(replacer, 'North Main Street'), ['North Main Street',
-         'N Mn St',
-         'N Main St',
-         'N Mn Street',
-         'North Main St',
-         'N Main Street',
-         'North Mn Street']);
+    assert.deepEqual(termops.replaceTokenPermutations(replacer, 'North Main Street').sort(), [
+        // 0 replacements
+        'North Main Street',
+        // 1 at a time
+        // 100
+        // 010
+        // 001
+        'N Main Street',
+        'North Mn Street',
+        'North Main St',
+        // 2 at a time
+        // 110
+        // 101
+        // 011
+        'N Mn Street',
+        'N Main St',
+        'North Mn St',
+        // 3 at a time
+        'N Mn St',
+    ].sort());
+    assert.end();
+});
+
+test('4 tokens - all match', function(assert) {
+    var replacer = token.createReplacer({'Street':'St', 'North':'N', 'Main':'Mn', 'West': 'W'});
+    assert.deepEqual(termops.replaceTokenPermutations(replacer, 'North West Main Street').sort(), [
+        // 0 replacements
+        'North West Main Street',
+        // 1 at a time
+        // 1000
+        // 0100
+        // 0010
+        // 0001
+        'N West Main Street',
+        'North W Main Street',
+        'North West Mn Street',
+        'North West Main St',
+        // 2 at a time
+        //1100
+        //1010
+        //1001
+        //0110
+        //0101
+        //0011
+        'N W Main Street',
+        'N West Mn Street',
+        'N West Main St',
+        'North W Mn Street',
+        'North W Main St',
+        'North West Mn St',
+        // 3 at a time
+        //1110
+        //1101
+        //1011
+        //0111
+        'N W Mn Street',
+        'N W Main St',
+        'N West Mn St',
+        'North W Mn St',
+        // 4 at a time
+        'N W Mn St',
+    ].sort());
     assert.end();
 });
 
