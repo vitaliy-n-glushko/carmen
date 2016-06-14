@@ -240,7 +240,6 @@ test('named/numbered group replacement', function(q) {
     });
     q.deepEqual(token.replaceToken(tokens, 'abc 123 def'), 'xyz @@@123@@@ def');
     q.deepEqual(token.replaceToken(tokens, 'abc 234 def'), 'xyz ###234### def');
-
     q.end();
 });
 
@@ -248,5 +247,17 @@ test('throw on mixed name/num replacement groups', function(q) {
     q.throws(function() {
         token.createReplacer({ "(abc)(?<namedgroup>def)": "${namedgroup}$1" });
     });
+    q.end();
+});
+
+test('reverse permutation', function(q) { 
+    var tokens = {
+        'saint': 'st',
+        'street': 'st',
+        'road': 'rd'
+    }
+    var result = token.createReverseReplacer(tokens);
+    q.deepEqual(result.map(function(r) { return r.to; }), ['$1saint$2','$1street$2','$1road$2']);
+    q.deepEqual(result.map(function(r) { return r.from.toString(); }), [ '/(\\W|^)st(\\W|$)/gi', '/(\\W|^)st(\\W|$)/gi', '/(\\W|^)rd(\\W|$)/gi' ]);
     q.end();
 });
