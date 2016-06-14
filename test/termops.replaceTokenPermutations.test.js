@@ -6,10 +6,10 @@ var token = require('../lib/util/token');
 test('termops.replaceTokenPermutations', function(assert) {
     var replacer = token.createReplacer({'Street':'St', 'North':'N'});
     assert.deepEqual(termops.replaceTokenPermutations(replacer, 'North Main Street', [
-        ['North Main Street'],
-        ['N Main Street'],
-        ['North Main St'],
-        ['N Main St']
-    ]));
+        'North Main Street',
+        'N Main Street',
+        'North Main St',
+        'N Main St']
+    ));
     assert.end();
 });
