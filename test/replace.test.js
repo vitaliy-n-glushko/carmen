@@ -253,29 +253,3 @@ test('throw on mixed name/num replacement groups', function(q) {
     });
     q.end();
 });
-
-test('reverse permutation', function(q) { 
-    var tokens = {
-        'saint': 'st',
-        'street': 'st',
-        'road': 'rd'
-    }
-    var result = token.createReplacer(tokens, true);
-    q.deepEqual(result.map(function(r) { return r.to; }), ['$1saint$2','$1street$2','$1road$2']);
-    q.deepEqual(result.map(function(r) { return r.from.toString(); }), [ '/(\\W|^)st(\\W|$)/gi', '/(\\W|^)st(\\W|$)/gi', '/(\\W|^)rd(\\W|$)/gi' ]);
-    q.end();
-});
-
-test('named/numbered group replacement for reverse permutation', function(q) {
-    var tokens = {
-        'saint': 'st',
-        'street': 'st',
-        'road': 'rd'
-    };
-    var result = token.createReplacer(tokens, true);
-
-    q.deepEqual(token.replaceToken(result, 'fargo rd'),'fargo road');
-    q.deepEqual(token.replaceToken(result, 'fargo st'),'fargo saint');
-    q.deepEqual(token.replaceToken(result, 'stwise'),'stwise');
-    q.end();
-});
