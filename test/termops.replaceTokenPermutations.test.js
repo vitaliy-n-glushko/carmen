@@ -22,15 +22,9 @@ test('3 tokens - all match', function(assert) {
 });
 
 test('4 tokens - one does not match', function(assert) {
-    var replacer = token.createReplacer({'Street':'St', 'North':'N', 'Main':'Mn', 'Thirteenth':'13th', "(?<number>2\\d+)": "###${number}###"});
-    assert.deepEqual(termops.replaceTokenPermutations(replacer, '123 North Main Street', [
-        'North Main Street',
-        'N Main Street',
-        'North Main St',
-        'N Main St',
-        'North Mn St',
-        'N Mn St',
-        'N Mn Street']
-    ));
+    var replacer = token.createReplacer({'Street':'St', 'North':'N', 'Main':'Mn', 'Thirteenth':'13th', "(?<number>1\\d+)": "###${number}###"});
+    assert.deepEqual(termops.replaceTokenPermutations(replacer, '123 North Main Street'), [
+        '123 North Main Street', '###123### N Mn St', '123 N Mn St', '###123### N Mn Street', '123 N Main St', '123 N Mn Street', '###123### North Mn Street', '123 North Main St', '123 N Main Street', '123 North Mn Street', '###123### North Main Street']
+    );
     assert.end();
 });
