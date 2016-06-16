@@ -220,6 +220,8 @@ test('replacer', function(q) {
     q.deepEqual(rep.map(function(r) { return r.named; }), [false, false]);
     q.deepEqual(rep.map(function(r) { return r.to; }), ['$1Rd$2', '$1St$2']);
     q.deepEqual(rep.map(function(r) { return r.from.toString(); }), ['/(\\W|^)Road(\\W|$)/gi', '/(\\W|^)Street(\\W|$)/gi']);
+    q.deepEqual(rep.map(function(r) { return r.rTo.toString(); }), ['$1Road$2', '$1Street$2']);
+    q.deepEqual(rep.map(function(r) { return r.rFrom; }), [/(\\W|^)Rd(\\W|$)/gi, /(\\W|^)St(\\W|$)/gi]);
 
     rep = token.createReplacer({
         'Maréchal': 'Mal',
@@ -228,6 +230,8 @@ test('replacer', function(q) {
     q.deepEqual(rep.map(function(r) { return r.named; }), [false, false, false]);
     q.deepEqual(rep.map(function(r) { return r.to; }), ['$1Mal$2', '$1Mal$2', '$1M$2']);
     q.deepEqual(rep.map(function(r) { return r.from.toString(); }), ['/(\\W|^)Maréchal(\\W|$)/gi', '/(\\W|^)Marechal(\\W|$)/gi', '/(\\W|^)Monsieur(\\W|$)/gi']);
+    q.deepEqual(rep.map(function(r) { return r.rTo.toString(); }), ['$1Maréchal$2', '$1Marechal$2', '$1Monsieur$2']);
+    q.deepEqual(rep.map(function(r) { return r.rFrom; }), [/(\\W|^)Mal(\\W|$)/gi, /(\\W|^)Mal(\\W|$)/gi, /(\\W|^)M(\\W|$)/gi]);
 
     q.end();
 });
@@ -247,31 +251,5 @@ test('throw on mixed name/num replacement groups', function(q) {
     q.throws(function() {
         token.createReplacer({ "(abc)(?<namedgroup>def)": "${namedgroup}$1" });
     });
-    q.end();
-});
-
-test('reverse permutation', function(q) { 
-    var tokens = {
-        'saint': 'st',
-        'street': 'st',
-        'road': 'rd'
-    }
-    var result = token.createReplacer(tokens, true);
-    q.deepEqual(result.map(function(r) { return r.to; }), ['$1saint$2','$1street$2','$1road$2']);
-    q.deepEqual(result.map(function(r) { return r.from.toString(); }), [ '/(\\W|^)st(\\W|$)/gi', '/(\\W|^)st(\\W|$)/gi', '/(\\W|^)rd(\\W|$)/gi' ]);
-    q.end();
-});
-
-test('named/numbered group replacement for reverse permutation', function(q) {
-    var tokens = {
-        'saint': 'st',
-        'street': 'st',
-        'road': 'rd'
-    };
-    var result = token.createReplacer(tokens, true);
-
-    q.deepEqual(token.replaceToken(result, 'fargo rd'),'fargo road');
-    q.deepEqual(token.replaceToken(result, 'fargo st'),'fargo saint');
-    q.deepEqual(token.replaceToken(result, 'stwise'),'stwise');
     q.end();
 });
