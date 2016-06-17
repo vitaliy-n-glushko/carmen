@@ -84,7 +84,22 @@ test('filter tokens', function(assert) {
          'Thirteenth':'13th',
          "(?<number>2\\d+)": "###${number}###"
         });
-    assert.deepEqual(JSON.stringify(token.tokenReplacerFilter(tokens, '243 North Main Street')), '[{"named":false,"from":{},"to":"$1St$2"},{"named":false,"from":{},"to":"$1N$2"},{"named":false,"from":{},"to":"$1Mn$2"},{"named":true,"from":{"xregexp":{"captureNames":["tokenBeginning","number","tokenEnding"],"source":"(?<tokenBeginning>\\\\W|^)(?<number>2\\\\d+)(?<tokenEnding>\\\\W|$)","flags":"gi"}},"to":"${tokenBeginning}###${number}###${tokenEnding}"}]');
+    var replaced = token.tokenReplacerFilter(tokens, '243 North Main Street');
+
+    assert.deepEqual(replaced[0].named, false);
+    assert.deepEqual(replaced[0].from, /(\W|^)Street(\W|$)/gi);
+    assert.deepEqual(replaced[0].to, '$1St$2');
+
+    assert.deepEqual(replaced[1].named, false);
+    assert.deepEqual(replaced[1].from, /(\W|^)North(\W|$)/gi);
+    assert.deepEqual(replaced[1].to, '$1N$2');
+
+    assert.deepEqual(replaced[2].named, false);
+    assert.deepEqual(replaced[2].from, /(\W|^)Main(\W|$)/gi);
+    assert.deepEqual(replaced[2].to, '$1Mn$2');
+
+    assert.deepEqual(replaced[3].named, true);
+    assert.deepEqual(replaced[3].from.toString(), /(\W|^)(2\d+)(\W|$)/gi.toString());
 
     assert.end();
 });
