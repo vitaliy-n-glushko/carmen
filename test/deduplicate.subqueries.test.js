@@ -38,11 +38,26 @@ tape('Dedupe subqueries array', function(assert) {
 
 tape('Dedupe subqueries array variation #2', function(assert) {
     var subqueriesCollection = [];
+
     subqueriesCollection.push([['main','st']]);
+    subqueriesCollection[0][0].ender = false;
+    subqueriesCollection[0][0].mask = 9;
     subqueriesCollection.push([['lake','st'],['wall', 'st'],['main','st']]);
+    subqueriesCollection[1][0].ender = false;
+    subqueriesCollection[1][0].mask = 5;
+    subqueriesCollection[1][1].ender = true;
+    subqueriesCollection[1][1].mask = 3;
+    subqueriesCollection[1][2].ender = false;
+    subqueriesCollection[1][2].mask = 9;
     subqueriesCollection.push([['lake','st'],['wall', 'st'],['main','st']]);
+    subqueriesCollection[2][0].ender = false;
+    subqueriesCollection[2][0].mask = 5;
+    subqueriesCollection[2][1].ender = true;
+    subqueriesCollection[2][1].mask = 3;
+    subqueriesCollection[2][2].ender = false;
+    subqueriesCollection[2][2].mask = 9;
     var deduped = deDuplicateSubqueries(subqueriesCollection);
-    assert.deepEqual(deduped, [[['main','st']],[['lake','st'],['wall','st']]], 'ok de-duped correctly');
+    assert.deepEqual(JSON.stringify(deduped), JSON.stringify([[['main','st']],[['lake','st'],['wall','st']]]), 'ok de-duped correctly');
     assert.end()
 });
 
