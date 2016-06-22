@@ -61,3 +61,22 @@ tape('Dedupe subqueries array variation #2', function(assert) {
     assert.end()
 });
 
+tape('Dedupe arrays with tokens - having same mask and ender but different text', function(assert) {
+    var subqueriesCollection = [];
+    subqueriesCollection.push([['23-414','beach','street'],['23###','beach','street'],[ '23-414','beach'],[ 'beach','street'],[ '23###','beach'],[ '23-414'],[ 'beach'],[ 'street'],[ '23###']]);
+
+    var enderArray = [true, true, false, true, false, false, false, true, false];
+    var maskArray = [7,7,3,6,3,1,2,4,1];
+
+    for (var j=0; j < obj[0][0].length; j++) {
+        obj[0][0][j].ender = enderArray[j];
+        obj[0][0][j].mask = maskArray[j];
+    }
+
+    var result = deDuplicateSubqueries(obj);
+    var expected = [[['23-414','beach','street'],['23###','beach','street'],['23-414','beach'],['beach','street'],['23###','beach'],['23-414'],['beach'],['street'],['23###']]];
+
+    assert.deepEqual(JSON.stringify(result),JSON.stringify(expected), 'ok de-duped correctly');
+    assert.end()
+});
+
