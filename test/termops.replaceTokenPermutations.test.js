@@ -76,7 +76,7 @@ test('4 tokens - all match', function(assert) {
     assert.end();
 });
 
-test('filter tokens', function(assert) {
+test('Tokens with regexp', function(assert) {
     var tokens = token.createReplacer(
         {'Street':'St',
          'North':'N',
