@@ -103,3 +103,16 @@ test('Tokens with regexp', function(assert) {
 
     assert.end();
 });
+
+test('Tokens for CJK characters', function(assert) {
+    var tokens = token.createReplacer(
+        { "Suite [0-9]+": "",
+          "Suite [a-z]": "",
+          "STE [0-9]+": "",
+          "STE [a-z]": ""
+        });
+    var replaced = token.tokenReplacerFilter(tokens);
+    var permutations = termops.replaceTokenPermutations(replaced, '中国')
+    console.log('permutations', permutations);
+    assert.end();
+});
