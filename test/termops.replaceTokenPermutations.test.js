@@ -1,6 +1,7 @@
 var termops = require('../lib/util/termops');
 var test = require('tape');
 var token = require('../lib/util/token');
+var fixture = require('./fixtures/tokens.json')
 
 test('2 tokens - all match', function(assert) {
     var replacer = token.createReplacer({'Street':'St', 'North':'N'});
@@ -105,14 +106,7 @@ test('Tokens with regexp', function(assert) {
 });
 
 test('Tokens for CJK characters', function(assert) {
-    var tokens = token.createReplacer(
-        { "Suite [0-9]+": "",
-          "Suite [a-z]": "",
-          "STE [0-9]+": "",
-          "STE [a-z]": ""
-        });
-    var replaced = token.tokenReplacerFilter(tokens);
-    var permutations = termops.replaceTokenPermutations(replaced, '中国')
-    console.log('permutations', permutations);
+    var tokens = token.createReplacer(fixture);
+    termops.replaceTokenPermutations(tokens, '中国')
     assert.end();
 });
