@@ -107,6 +107,7 @@ test('Tokens with regexp', function(assert) {
 
 test('Tokens for CJK characters', function(assert) {
     var tokens = token.createReplacer(fixture);
-    termops.replaceTokenPermutations(tokens, '中国')
+    termops.replaceTokenPermutations(tokens, '9丁目');
+    assert.ifError(err);
     assert.end();
 });
