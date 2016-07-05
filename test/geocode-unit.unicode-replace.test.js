@@ -50,26 +50,27 @@ tape('Marechal => Maréchal', function(t) {
 var config = {
     test: new mem({
         geocoder_tokens: {
-            'strasse': 'straße',
+            'straße': 'str',
+            'strasse': 'str'
         },
         maxzoom:6
     }, function() {})
 };
 var b = new Carmen(config);
 
-tape('index strasse', function(t) {
+tape('index Alpenstraße', function(t) {
     addFeature(config.test, {
         id:1,
         properties: {
-            'carmen:text':'strasse',
+            'carmen:text': 'Alpenstraße' ,
             'carmen:zxy':['6/32/32'],
             'carmen:center':[0,0]
         }
     }, t.end);
 });
-tape('straße => strasse', function(t) {
-    b.geocode('straße', { limit_verify:1 }, function(err, res) {
-        t.deepEqual(res.features[0].place_name, 'strasse');
+tape('straße => str', function(t) {
+    b.geocode('Alpenstraße', { limit_verify:1 }, function(err, res) {
+        t.deepEqual(res.features[0].place_name, 'Alpenstraße');
         t.end();
     });
 });
