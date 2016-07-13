@@ -56,6 +56,31 @@ tape('dedupe', function(assert) {
 
     features = [
         {
+            place_name: 'Dandenong Road, Mount Ommaney',
+            text: 'Dandenong Road',
+            center:[0,0],
+            geometry: {
+                type:'Point',
+                coordinates:[0,0]
+            }
+        },
+        {
+            place_name: '171 Dandenong Road, Mount Ommaney',
+            text: 'Dandenong Road',
+            address: 171,
+            center:[0,0],
+            geometry: {
+                type:'Point',
+                coordinates:[0,0]
+            }
+        }
+    ];
+    assert.deepEqual(dedupe(features), [
+        features[1]
+    ], 'dedup should dedup accross streets w/ address vs without');
+
+    features = [
+        {
             place_name: 'main st springfield',
             text: 'main st',
             center:[0,0],
