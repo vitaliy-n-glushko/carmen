@@ -59,6 +59,17 @@ tape('index landmark', function(t) {
     }, t.end);
 });
 
+tape('index POI', function(t) {
+    addFeature(conf.poi, {
+        id:2,
+        properties: {
+            'carmen:text':'china',
+            'carmen:zxy':['6/32/32'],
+            'carmen:center':[0,0]
+        }
+    }, t.end);
+});
+
 // invalid options.types type
 tape('china', function(t) {
     c.geocode('china', { types: 'asdf' }, function(err, res) {
