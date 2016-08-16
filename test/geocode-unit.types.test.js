@@ -144,7 +144,7 @@ tape('china (POI)',function(t) {
 tape('reverse', function(t) {
     c.geocode('0,0', {}, function(err, res) {
         t.ifError(err);
-        t.deepEqual(res.features.length, 3, '3 results');
+        t.deepEqual(res.features.length, 5, '5 results');
         t.deepEqual(res.features[0].id, 'place.1', 'place wins');
         t.end();
     });
