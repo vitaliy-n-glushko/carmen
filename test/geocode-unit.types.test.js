@@ -132,6 +132,14 @@ tape('china (landmark)',function(t) {
     });
 });
 
+tape('china (POI)',function(t) {
+    c.geocode('china', { limit_verify:3, types:['poi'] }, function(err, res) {
+        t.ifError(err);
+        t.notEqual(res.features[0].id, 'poi.2', 'poi #2');
+        t.end();
+    });
+});
+
 // reverse without type filter
 tape('reverse', function(t) {
     c.geocode('0,0', {}, function(err, res) {
