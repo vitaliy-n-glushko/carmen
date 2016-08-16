@@ -168,6 +168,15 @@ tape('reverse: landmark', function(t) {
     });
 });
 
+tape('reverse: poi', function(t) {
+    c.geocode('0,0', { types:['poi'] }, function(err, res) {
+        t.ifError(err);
+        t.deepEqual(res.features.length, 1, '1 result');
+        t.deepEqual(res.features[0].id, 'poi.2', 'poi wins');
+        t.end();
+    });
+});
+
 tape('reverse: country, place', function(t) {
     c.geocode('0,0', { types:['country','place'] }, function(err, res) {
         t.ifError(err);
