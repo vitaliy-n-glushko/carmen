@@ -12,7 +12,8 @@ var addFeature = require('../lib/util/addfeature');
 var conf = {
     country: new mem(null, function() {}),
     region: new mem(null, function() {}),
-    place: new mem(null, function() {})
+    place: new mem(null, function() {}),
+    poi: new mem(null, function() {})
 };
 var c = new Carmen(conf);
 tape('index country', function(t) {
@@ -45,6 +46,19 @@ tape('index place', function(t) {
         }
     }, t.end);
 });
+
+tape('index landmark', function(t) {
+    addFeature(conf.poi, {
+        id:1,
+        landmark: true,
+        properties: {
+            'carmen:text':'china',
+            'carmen:zxy':['6/32/32'],
+            'carmen:center':[0,0]
+        }
+    }, t.end);
+});
+
 // invalid options.types type
 tape('china', function(t) {
     c.geocode('china', { types: 'asdf' }, function(err, res) {
@@ -64,7 +78,7 @@ tape('china', function(t) {
 // invalid options.types[0] value
 tape('china', function(t) {
     c.geocode('china', { types: ['asdf'] }, function(err, res) {
-        t.equal(err && err.toString(), 'Error: Type "asdf" is not a known type. Must be one of: country, region, place');
+        t.equal(err && err.toString(), 'Error: Type "asdf" is not a known type. Must be one of: country, region, place, poi');
         t.equal(err && err.code, 'EINVALID');
         t.end();
     });
@@ -98,6 +112,15 @@ tape('china', function(t) {
     });
 });
 
+// types: landmark
+tape('china (landmark)',function(t) {
+    c.geocode('china', { limit_verify:3, types:['landmark'] }, function(err, res) {
+        t.ifError(err);
+        t.deepEqual(res.features[0].id, 'poi.1', 'poi #1');
+        t.end();
+    });
+});
+
 // reverse without type filter
 tape('reverse', function(t) {
     c.geocode('0,0', {}, function(err, res) {
@@ -107,6 +130,7 @@ tape('reverse', function(t) {
         t.end();
     });
 });
+
 tape('reverse: country', function(t) {
     c.geocode('0,0', { types:['country'] }, function(err, res) {
         t.ifError(err);
@@ -115,7 +139,17 @@ tape('reverse: country', function(t) {
         t.end();
     });
 });
-tape('reverse: country,place', function(t) {
+
+tape('reverse: landmark', function(t) {
+    c.geocode('0,0', { types:['landmark'] }, function(err, res) {
+        t.ifError(err);
+        t.deepEqual(res.features.length, 1, '1 result');
+        t.deepEqual(res.features[0].id, 'poi.1', 'poi wins');
+        t.end();
+    });
+});
+
+tape('reverse: country, place', function(t) {
     c.geocode('0,0', { types:['country','place'] }, function(err, res) {
         t.ifError(err);
         t.deepEqual(res.features.length, 2, '2 results');
