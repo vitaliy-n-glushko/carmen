@@ -88,7 +88,7 @@ var addFeature = require('../lib/util/addfeature');
         });
     });
     tape('scoreAbove = 200', function(t) {
-        c.geocode('Taj Mahal', { scoreAbove:200 }, function(err, res) {
+        c.geocode('Taj Mahal', { scoreAbove:100 }, function(err, res) {
             t.equal(res.features.length, 1);
             t.equal(res.features[0].id, 'poi.5');
             t.equal(res.features[0].text, 'Taj Mahal');
