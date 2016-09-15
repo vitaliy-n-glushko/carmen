@@ -14,35 +14,36 @@ var addFeature = require('../lib/util/addfeature');
         poi: new mem(null, function() {})
     };
     var c = new Carmen(conf);
-    var tajMahalVarious = ['Taj Mahal Dry Cleaners', 'Taj Mahal Photos', 'Taj Mahal restaurant', 'Taj Mahal cafe']
+    var tajMahalVarious = ['Taj Mahal', 'Taj Mahal Dry Cleaners', 'Taj Mahal Photos', 'Taj Mahal restaurant', 'Taj Mahal cafe'];
+
+    //scorefactor classes
+    // 1 - 39 - 1 * scorefactor
+    // 40 - 79 - 2 * scorefactor
+    // 80 - 119 - 3 * scorefactor
+    // 120 - 159 - 4 * scorefactor
+    // 160 - 199 - 5 * scorefactor
+    // 200 - 239 - 6 * scorefactor
+    // 240 - 279 - 7 * scorefactor
+    var score = [275, 10, 70, 100, 140];
+
     
     tape('index insignificant Taj Mahal pois (noise)', function(t) {
         var q = queue(1);
-        for (var i = 1; i < 5; i++) q.defer(function(i, done) {
+
+        for (var i = 0; i < 5; i++) q.defer(function(i, done) {
             addFeature(conf.poi, {
-                id:i,
+                id:i+1,
                 properties: {
-                    'carmen:score':i,
-                    'carmen:text': tajMahalVarious[i-1],
+                    'carmen:score':score[i],
+                    'carmen:text': tajMahalVarious[i],
                     'carmen:zxy':['6/32/32'],
-                    'carmen:center':[i,0]
+                    'carmen:center': (i === 1) ? [8.44, -2.81] : [i,0]
                 }
             }, done);
         }, i);
         q.awaitAll(t.end);
     });
     
-    tape('index Taj Mahal (landmark)', function(t) {
-        addFeature(conf.poi, {
-            id:5,
-            properties: {
-                'carmen:score': 300,
-                'carmen:text': 'Taj Mahal',
-                'carmen:zxy': ['6/33/32'],
-                'carmen:center': [8.44, -2.81]
-            }
-        }, t.end);
-    });
     tape('scoreAbove = 1', function(t) {
         c.geocode('Taj Mahal', { scoreAbove:1 }, function(err, res) {
             t.equal(res.features.length, 5);
@@ -50,7 +51,7 @@ var addFeature = require('../lib/util/addfeature');
             res.features.forEach(function(feature) {
                 ids.push(feature.id)
             });
-            t.deepEqual(ids.sort(), ['poi.1', 'poi.2', 'poi.3', 'poi.4','poi.5']);
+            t.deepEqual(ids.sort(), ['poi.1', 'poi.2', 'poi.3', 'poi.4', 'poi.5']);
             t.end();
         });
     });
@@ -61,34 +62,34 @@ var addFeature = require('../lib/util/addfeature');
             res.features.forEach(function(feature) {
                 ids.push(feature.id)
             });
-            t.deepEqual(ids.sort(), ['poi.2', 'poi.3', 'poi.4','poi.5']);
+            t.deepEqual(ids.sort(), ['poi.1', 'poi.3', 'poi.4','poi.5']);
             t.end();
         });
     });
-    tape('scoreAbove = 3', function(t) {
+    tape('scoreAbove = 10', function(t) {
         c.geocode('Taj Mahal', { scoreAbove:3 }, function(err, res) {
             t.equal(res.features.length, 3);
             var ids = []
             res.features.forEach(function(feature) {
                 ids.push(feature.id)
             });
-            t.deepEqual(ids.sort(), ['poi.3', 'poi.4','poi.5']);
+            t.deepEqual(ids.sort(), ['poi.1', 'poi.4','poi.5']);
             t.end();
         });
     });
-    tape('scoreAbove = 4', function(t) {
+    tape('scoreAbove = 30', function(t) {
         c.geocode('Taj Mahal', { scoreAbove:4 }, function(err, res) {
             t.equal(res.features.length, 2);
             var ids = []
             res.features.forEach(function(feature) {
                 ids.push(feature.id)
             });
-            t.deepEqual(ids.sort(), ['poi.4','poi.5']);
+            t.deepEqual(ids.sort(), ['poi.1','poi.5']);
             t.end();
         });
     });
-    tape('scoreAbove = 200', function(t) {
-        c.geocode('Taj Mahal', { scoreAbove:100 }, function(err, res) {
+    tape('scoreAbove = 95', function(t) {
+        c.geocode('Taj Mahal', { scoreAbove:95 }, function(err, res) {
             t.equal(res.features.length, 1);
             t.equal(res.features[0].id, 'poi.5');
             t.equal(res.features[0].text, 'Taj Mahal');
