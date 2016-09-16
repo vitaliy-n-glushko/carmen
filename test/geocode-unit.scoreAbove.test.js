@@ -62,11 +62,11 @@ var addFeature = require('../lib/util/addfeature');
             res.features.forEach(function(feature) {
                 ids.push(feature.id)
             });
-            t.deepEqual(ids.sort(), ['poi.1', 'poi.3', 'poi.4','poi.5']);
+            t.deepEqual(ids.sort(), ['poi.1', 'poi.3', 'poi.4', 'poi.5']);
             t.end();
         });
     });
-    tape('scoreAbove = 10', function(t) {
+    tape('scoreAbove = 3', function(t) {
         c.geocode('Taj Mahal', { scoreAbove:3 }, function(err, res) {
             t.equal(res.features.length, 3);
             var ids = []
@@ -77,22 +77,25 @@ var addFeature = require('../lib/util/addfeature');
             t.end();
         });
     });
-    tape('scoreAbove = 30', function(t) {
+    tape('scoreAbove = 4', function(t) {
         c.geocode('Taj Mahal', { scoreAbove:4 }, function(err, res) {
             t.equal(res.features.length, 2);
             var ids = []
             res.features.forEach(function(feature) {
                 ids.push(feature.id)
             });
-            t.deepEqual(ids.sort(), ['poi.1','poi.5']);
+            t.deepEqual(ids.sort(), ['poi.1', 'poi.5']);
             t.end();
         });
     });
-    tape('scoreAbove = 95', function(t) {
-        c.geocode('Taj Mahal', { scoreAbove:95 }, function(err, res) {
+    tape('scoreAbove = 5', function(t) {
+        c.geocode('Taj Mahal', { scoreAbove:5 }, function(err, res) {
             t.equal(res.features.length, 1);
-            t.equal(res.features[0].id, 'poi.5');
-            t.equal(res.features[0].text, 'Taj Mahal');
+            var ids = []
+            res.features.forEach(function(feature) {
+                ids.push(feature.id)
+            });
+            t.deepEqual(ids.sort(), ['poi.1']);
             t.end();
         });
     });

@@ -81,7 +81,7 @@ if (argv.debug) argv.debug = parseInt(argv.debug);
 
 if (argv.limit) argv.limit = parseInt(argv.limit);
 
-if (argv.scoreAbove) argv.scoreAbove = Math.floor(parseInt(argv.scoreAbove) % 12.5);
+if (argv.scoreAbove) argv.scoreAbove = parseInt(argv.scoreAbove);
 
 var load = +new Date();
 
