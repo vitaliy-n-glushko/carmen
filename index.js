@@ -125,6 +125,7 @@ function Geocoder(indexes, options) {
             source.minscore = info.minscore;
             source.stack = stack;
             source.zoom = info.maxzoom + parseInt(info.geocoder_resolution||0,10);
+            source.scoreranges = info.scoreranges ? info.scoreranges : {};
             source.type = type;
             source.name = name;
             source.id = id;
