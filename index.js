@@ -26,7 +26,7 @@ function Geocoder(indexes, options) {
     var q = queue(10);
 
     this.indexes = indexes;
-    this.replacer = token.createReplacer(options.tokens || {});
+    this.replacer = token.createGlobalReplacer(options.tokens || {});
     this.byname = {};
     this.bytype = {};
     this.bystack = {};
@@ -97,10 +97,16 @@ function Geocoder(indexes, options) {
             for (var ix = 0; ix < keys.length; ix ++) {
                 if (/geocoder_format_/.test(keys[ix])) source[keys[ix]] = info[keys[ix]]||false;
             }
+            source.geocoder_address_order = info.geocoder_address_order || 'ascending'; // get expected address order from index-level setting
             source.geocoder_format = info.geocoder_format||false;
             source.geocoder_layer = (info.geocoder_layer||'').split('.').shift();
             source.geocoder_tokens = info.geocoder_tokens||{};
             source.token_replacer = token.createReplacer(info.geocoder_tokens||{});
+
+            if(tokenValidator(source.token_replacer)) {
+                throw new Error('Using global tokens');
+            }
+
             source.maxzoom = info.maxzoom;
             source.stack = stack;
             source.zoom = info.maxzoom + parseInt(info.geocoder_resolution||0,10);
@@ -229,6 +235,14 @@ function boundsIntersect(a, b) {
     if (a[3] < b[1]) return false; // a is below b
     if (a[1] > b[3]) return false; // a is above b
     return true;
+}
+
+function tokenValidator(token_replacer) {
+    for (var i = 0; i < token_replacer.length; i++) {
+        if (token_replacer[i].from.toString().indexOf(' ') >= 0 || token_replacer[i].to.toString().indexOf(' ') >= 0) {
+            return true;
+        }
+    }
 }
 
 // Ensure that all carmen sources are opened.

@@ -1,5 +1,68 @@
 # Changelog
 
+## 17.0.0
+
+- Allow more flexible regexes in global tokens and refactor how they are applied.
+
+## 16.2.4
+
+- types + limit reverse query mode is now only a concept handled by reverseGeocode().
+- context() always returns a single context.
+- Adds context.nearest() for playing the role that the proximity context mode played before -- returns a flat array of [ lon, lat ] points that can then be context() queried for full features.
+- Adds additional unit test to demonstrate that in types/limits mode reverse geocodes do indeed load full features/derive address points properly.
+- More verbosity in --debug output
+
+## 16.2.3
+
+- Optimize vector geojson output at indexing time for ligther vector tiles.
+
+## 16.2.2
+
+- Bump carmen-cache for better error handling on index merges.
+
+## 16.2.1
+
+- Use stricter eslint rules.
+
+## 16.2.0
+
+- Add support for addresses that are ordered from largest feature to smallest
+- Fix a bug in ID queries when `geocoder_name` != `geocoder_type`.
+
+## 16.1.0
+
+- Fix an issue with too-strict filtering of indexes that use a combined stack range
+
+## 16.0.0
+
+- All addresses are now standardized to GeometryCollections internally
+- Allows for mixed type (pt/itp) features as well as reducing complexity at runtime (at the cost of index time)
+
+## 15.2.4
+
+- Bump due to npm strangeness
+
+## 15.2.3
+
+- Fix global token bug that prevented global tokens being used by indexer
+- Added ability for carmen cli to specify global token file
+
+## 15.2.2
+
+- Moves limit constants into `lib/constants.js` for easier tracking and updates.
+
+## 15.2.1
+
+- Set the relevance score to 1 when a feature is queried by ID
+
+## 15.2.0
+
+- Ensures that tokens which contain whitespaces are a part of the global tokens
+
+## 15.1.9
+
+- Fix bug where dedup could put less relevant results infront of higher ones
+
 ## 15.1.8
 
 - Fix broken phrasematch bench
