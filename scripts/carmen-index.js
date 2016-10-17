@@ -59,6 +59,7 @@ function stopWriting(err) {
 function index(err) {
     if (err) throw err;
 
+    var last = +new Date;
     config.tokens = tokens;
 
     var carmen = new Carmen(conf, {
@@ -66,7 +67,6 @@ function index(err) {
     });
     config.output = process.stdout;
 
-    var last = +new Date;
     carmen.on('index', function(num) {
         console.error('Indexed %s docs @ %s/s', num, Math.floor(num * 1000 / (+new Date - last)));
         last = +new Date;
