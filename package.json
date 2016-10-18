@@ -11,6 +11,7 @@
     "dawg-cache": "0.3.1",
     "err-code": "1.1.1",
     "eslint": "^1.5.0",
+    "geobuf": "^3.0.0",
     "geojsonhint": "^1.1.0",
     "locking": "2.0.2",
     "mapnik": "~3.5.12",
