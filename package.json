@@ -18,6 +18,7 @@
     "minimist": "1.2.0",
     "model-un": "0.0.3",
     "murmur": "0.0.2",
+    "pbf": "^3.0.2",
     "sphericalmercator": "~1.0.1",
     "split": "1.0.0",
     "tile-cover": "3.0.x",
