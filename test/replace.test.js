@@ -201,10 +201,16 @@ var tokens = token.createReplacer({
     "San Francisco": "sf"
 });
 
-test('token replacement', function(q) {
-    q.deepEqual(token.replaceTokenizedQueryTokens(tokens, ['fargo', 'street', 'northeast', 'san', 'francisco']), ['fargo', 'st', 'ne', 'san', 'francisco']);
-    q.deepEqual(token.replaceTokenizedQueryTokens(tokens, ['coolstreet']),['coolstreet']);
-    q.deepEqual(token.replaceTokenizedQueryTokens(tokens, ['streetwise']),['streetwise']);
+test('source token replacement', function(q) {
+    q.deepEqual(token.getQueryTokenVariations(tokens, ['fargo', 'street', 'northeast', 'san', 'francisco']).sort(), [
+        [ 'fargo', 'saint', 'ne', 'san', 'francisco' ],
+        [ 'fargo', 'saint', 'northeast', 'san', 'francisco' ],
+        [ 'fargo', 'street', 'northeast', 'san', 'francisco' ],
+        [ 'fargo', 'st', 'northeast', 'san', 'francisco' ],
+        [ 'fargo', 'street', 'ne', 'san', 'francisco' ],
+        [ 'fargo', 'st', 'ne', 'san', 'francisco' ]].sort());
+    q.deepEqual(token.getQueryTokenVariations(tokens, ['coolstreet']),[['coolstreet']]);
+    q.deepEqual(token.getQueryTokenVariations(tokens, ['streetwise']),[['streetwise']]);
     q.end();
 });
 
@@ -216,21 +222,17 @@ test('replacer', function(q) {
         'Road': 'Rd',
         'Street': 'St'
     });
-    q.deepEqual(rep.map(function(r) { return r.named; }), [false, false]);
-    q.deepEqual(rep.map(function(r) { return r.to; }), ['Rd', 'St']);
-    q.deepEqual(rep.map(function(r) { return r.from.toString(); }), ['/^Road$/gi', '/^Street$/gi']);
-    q.deepEqual(rep.map(function(r) { return r.rTo.toString(); }), ['Road', 'Street']);
-    q.deepEqual(rep.map(function(r) { return r.rFrom; }), [/^Rd$/gi, /^St$/gi]);
+    q.deepEqual(rep.map(function(r) { return r.named; }), [false, false, false, false]);
+    q.deepEqual(rep.map(function(r) { return r.to; }), ['Rd', 'Road', 'St', 'Street']);
+    q.deepEqual(rep.map(function(r) { return r.from.toString(); }), ['/^Road$/gi', '/^Rd$/gi', '/^Street$/gi', '/^St$/gi']);
 
     rep = token.createReplacer({
         'Maréchal': 'Mal',
         'Monsieur': 'M'
     });
-    q.deepEqual(rep.map(function(r) { return r.named; }), [false, false, false]);
-    q.deepEqual(rep.map(function(r) { return r.to; }), ['Mal', 'Mal', 'M']);
-    q.deepEqual(rep.map(function(r) { return r.from.toString(); }), ['/^Maréchal$/gi', '/^Marechal$/gi', '/^Monsieur$/gi']);
-    q.deepEqual(rep.map(function(r) { return r.rTo.toString(); }), ['Maréchal', 'Marechal', 'Monsieur']);
-    q.deepEqual(rep.map(function(r) { return r.rFrom; }), [/^Mal$/gi, /^Mal$/gi, /^M$/gi]);
+    q.deepEqual(rep.map(function(r) { return r.named; }), [false, false, false, false, false, false]);
+    q.deepEqual(rep.map(function(r) { return r.to; }), [ 'Mal', 'Maréchal', 'Mal', 'Marechal', 'M', 'Monsieur' ]);
+    q.deepEqual(rep.map(function(r) { return r.from.toString(); }), [ '/^Maréchal$/gi', '/^Mal$/gi', '/^Marechal$/gi', '/^Mal$/gi', '/^Monsieur$/gi', '/^M$/gi' ]);
 
     q.end();
 });
@@ -241,8 +243,10 @@ test('named/numbered group replacement', function(q) {
         "(1\\d+)": "@@@$1@@@",
         "(?<number>2\\d+)": "###${number}###"
     });
-    q.deepEqual(token.replaceTokenizedQueryTokens(tokens, ['abc', '123', 'def']), ['xyz', '@@@123@@@', 'def']);
-    q.deepEqual(token.replaceTokenizedQueryTokens(tokens, ['abc', '234', 'def']), ['xyz', '###234###', 'def']);
+    q.deepEqual(token.getQueryTokenVariations(tokens, ['abc', '123', 'def']),
+        [ [ 'abc', '123', 'def' ], [ 'xyz', '123', 'def' ], [ 'abc', '@@@123@@@', 'def' ], [ 'xyz', '@@@123@@@', 'def' ] ]);
+    q.deepEqual(token.getQueryTokenVariations(tokens, ['abc', '234', 'def']),
+        [ [ 'abc', '234', 'def' ], [ 'xyz', '234', 'def' ], [ 'abc', '###234###', 'def' ], [ 'xyz', '###234###', 'def' ] ]);
     q.end();
 });
 

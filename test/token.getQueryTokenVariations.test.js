@@ -1,18 +1,17 @@
-var termops = require('../lib/util/termops');
 var test = require('tape');
 var token = require('../lib/util/token');
 var fixture = require('./fixtures/tokens.json')
 
 test('2 tokens - all match', function(assert) {
     var replacer = token.createReplacer({'Street':'St', 'North':'N'});
-    assert.deepEqual(termops.replaceTokenPermutations(replacer, ['north', 'main', 'street']), 
-        [['north', 'main', 'street'], ['n', 'main', 'st'], ['north', 'main', 'st'], ['n', 'main', 'street']]);
+    assert.deepEqual(token.getQueryTokenVariations(replacer, ['north', 'main', 'street']).sort(), 
+        [['north', 'main', 'street'], ['n', 'main', 'st'], ['north', 'main', 'st'], ['n', 'main', 'street']].sort());
     assert.end();
 });
 
 test('3 tokens - all match', function(assert) {
     var replacer = token.createReplacer({'Street':'St', 'North':'N', 'Main':'Mn'});
-    assert.deepEqual(termops.replaceTokenPermutations(replacer, ['north', 'main', 'street']).sort(), [
+    assert.deepEqual(token.getQueryTokenVariations(replacer, ['north', 'main', 'street']).sort(), [
         // 0 replacements
         ['north', 'main', 'street'],
         // 1 at a time
@@ -37,7 +36,7 @@ test('3 tokens - all match', function(assert) {
 
 test('4 tokens - all match', function(assert) {
     var replacer = token.createReplacer({'Street':'St', 'North':'N', 'Main':'Mn', 'West': 'W'});
-    assert.deepEqual(termops.replaceTokenPermutations(replacer, ['north', 'west', 'main', 'street']).sort(), [
+    assert.deepEqual(token.getQueryTokenVariations(replacer, ['north', 'west', 'main', 'street']).sort(), [
         // 0 replacements
         ['north', 'west', 'main', 'street'],
         // 1 at a time
@@ -77,43 +76,15 @@ test('4 tokens - all match', function(assert) {
     assert.end();
 });
 
-test('Tokens with regexp', function(assert) {
-    var tokens = token.createReplacer(
-        {'Street':'St',
-         'North':'N',
-         'Main':'Mn',
-         'Thirteenth':'13th',
-         "(?<number>2\\d+)": "###${number}###"
-        });
-    var replaced = token.tokenReplacerFilter(tokens, termops.tokenize('243 North Main Street'));
-
-    assert.deepEqual(replaced[0].named, false);
-    assert.deepEqual(replaced[0].from, /^Street$/gi);
-    assert.deepEqual(replaced[0].to, 'St');
-
-    assert.deepEqual(replaced[1].named, false);
-    assert.deepEqual(replaced[1].from, /^North$/gi);
-    assert.deepEqual(replaced[1].to, 'N');
-
-    assert.deepEqual(replaced[2].named, false);
-    assert.deepEqual(replaced[2].from, /^Main$/gi);
-    assert.deepEqual(replaced[2].to, 'Mn');
-
-    assert.deepEqual(replaced[3].named, true);
-    assert.deepEqual(replaced[3].from.toString(), /^(2\d+)$/gi.toString());
-
-    assert.end();
-});
-
 test('Tokens for CJK characters', function(assert) {
     var tokens = token.createReplacer(fixture);
-    assert.deepEqual(termops.replaceTokenPermutations(tokens, ['9丁目']), [ ['9丁目'], ['九丁目'] ], 'should be equivalent');
+    assert.deepEqual(token.getQueryTokenVariations(tokens, ['9丁目']), [ ['9丁目'], ['九丁目'] ], 'should be equivalent');
     assert.end();
 });
 
 test('Word boundaries an unicode characters', function(assert) {
     var replacer = token.createReplacer({'North':'N'});
-    assert.deepEqual(termops.replaceTokenPermutations(replacer, ['general', 'pirán', 'argentina']),
+    assert.deepEqual(token.getQueryTokenVariations(replacer, ['general', 'pirán', 'argentina']),
         [['general', 'pirán', 'argentina']]);
     assert.end();
 });
