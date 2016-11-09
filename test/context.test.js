@@ -310,7 +310,7 @@ test('contextVector matched negative score', function(assert) {
             {
                 "type": "Feature",
                 "geometry": { "type": "Point", "coordinates": [ 0,0 ] },
-                "properties": { "_id": 1, "_text": "A", "_score": -1 }
+                "properties": { "id": 1, "carmen:text": "A", "carmen:score": -1 }
             }
         ]
     }),"data");
@@ -435,12 +435,12 @@ test('contextVector restricts distance', function(assert) {
             {
                 "type": "Feature",
                 "geometry": { "type": "Point", "coordinates": [-0.001,0.001] },
-                "properties": { "_id":1, "_text": "A" }
+                "properties": { "id":1, "carmen:text": "A" }
             },
             {
                 "type": "Feature",
                 "geometry": { "type": "Point", "coordinates": [0.001,0.001] },
-                "properties": { "_id":2, "_text": "B" }
+                "properties": { "id":2, "carmen:text": "B" }
             }
         ]
     };
