@@ -1,5 +1,22 @@
 # Changelog
 
+## 17.5.2
+
+- Add stopgap measure to indexer to partially handle features with > 10k zxy covers. (https://github.com/mapbox/carmen/pull/545)
+
+## 17.5.1
+
+- More consistent behavior for nested feature promotion when used with the `language` option.
+- Code and style improvements.
+
+## 17.5.0
+
+- Modifies verifyContext to better handle identically-named nested features e.g. "New York, New York". Preferentially returns the smaller feature in such cases.
+
+## 17.4.0
+
+- Introduce mechanisms for approximate guessing of requested language, both using heuristics and hard-coded fallbacks.
+
 ## 17.3.0
 
 - Include private `carmen:` properties in feature output when in debug mode.
