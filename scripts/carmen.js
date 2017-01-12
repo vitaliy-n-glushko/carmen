@@ -95,22 +95,22 @@ carmen.geocode(argv.query, {
 }, function(err, data) {
     if (err) throw err;
     if (data.features.length && !argv.geojson) {
-        console.log('\n\nresults:', data, '\n\n');
-        console.log('Tokens');
-        console.log('------');
-        console.log(data.query.join(', '));
-        console.log('');
-        console.log('Features');
-        console.log('--------');
-        data.features.forEach(function(f) {
-            console.log('- %s %s (%s) score: %s', f.relevance.toFixed(2), f.place_name, f.id, f.score);
-        });
-        console.log('');
-        console.log('Indexes');
-        console.log('--------');
-        data.indexes.forEach(function(i) {
-            console.log('- %s', i);
-        });
+        console.log('\n\nresults:', JSON.stringify(data, null, 2), '\n\n');
+        // console.log('Tokens');
+        // console.log('------');
+        // console.log(data.query.join(', '));
+        // console.log('');
+        // console.log('Features');
+        // console.log('--------');
+        // data.features.forEach(function(f) {
+        //     console.log('- %s %s (%s) score: %s', f.relevance.toFixed(2), f.place_name, f.id, f.score);
+        // });
+        // console.log('');
+        // console.log('Indexes');
+        // console.log('--------');
+        // data.indexes.forEach(function(i) {
+        //     console.log('- %s', i);
+        // });
         console.log('');
     }
     if (data.features.length && argv.geojson) {
