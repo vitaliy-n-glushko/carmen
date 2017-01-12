@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+var util = require('util');
+
 if (!process.argv[2]) {
     console.log('Usage: carmen.js [file|dir] --query="<query>"');
     process.exit(1);
@@ -98,7 +100,7 @@ carmen.geocode(argv.query, {
         delete Object.prototype.toJSON;
         delete Array.prototype.toJSON;
         delete String.prototype.toJSON;
-        console.log('\n\nresults:', JSON.stringify(data, null, 2), '\n\n');
+        console.log('\n\nresults:', util.inspect(data, { showHidden: true, depth: null }));
         // console.log('Tokens');
         // console.log('------');
         // console.log(data.query.join(', '));
