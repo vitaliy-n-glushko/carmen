@@ -95,6 +95,10 @@ carmen.geocode(argv.query, {
 }, function(err, data) {
     if (err) throw err;
     if (data.features.length && !argv.geojson) {
+        delete Object.prototype.toJSON;
+        delete Array.prototype.toJSON;
+        delete Hash.prototype.toJSON;
+        delete String.prototype.toJSON;
         console.log('\n\nresults:', JSON.stringify(data, null, 2), '\n\n');
         // console.log('Tokens');
         // console.log('------');
@@ -111,7 +115,7 @@ carmen.geocode(argv.query, {
         // data.indexes.forEach(function(i) {
         //     console.log('- %s', i);
         // });
-        console.log('');
+        // console.log('');
     }
     if (data.features.length && argv.geojson) {
         console.log(JSON.stringify(data, null, 2));
