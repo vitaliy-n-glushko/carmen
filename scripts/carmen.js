@@ -97,7 +97,6 @@ carmen.geocode(argv.query, {
     if (data.features.length && !argv.geojson) {
         delete Object.prototype.toJSON;
         delete Array.prototype.toJSON;
-        delete Hash.prototype.toJSON;
         delete String.prototype.toJSON;
         console.log('\n\nresults:', JSON.stringify(data, null, 2), '\n\n');
         // console.log('Tokens');
