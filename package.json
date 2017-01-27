@@ -20,7 +20,7 @@
     "@turf/line-distance": "^3.7.3",
     "@turf/point-on-surface": "^3.7.3",
     "d3-queue": "3.0.x",
-    "dawg-cache": "0.3.1",
+    "dawg-cache": "https://github.com/mapbox/dawg-cache/tarball/c++11",
     "err-code": "1.1.1",
     "mapnik": "~3.5.12",
     "minimist": "1.2.0",

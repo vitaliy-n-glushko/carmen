@@ -2,7 +2,12 @@ machine:
   node:
     version: 4
   pre:
-  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test; sudo apt-get -y update; sudo apt-get -y install libstdc++-5-dev gcc-4.8 g++-4.8; export CXX=g++-4.8
+  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test; sudo apt-get -y update; sudo apt-get -y install libstdc++-5-dev;
+  # install C++14 capable compiler via mason
+  - mkdir mason && curl -sSfL https://github.com/mapbox/mason/archive/v0.5.0.tar.gz | tar --gunzip --extract --strip-components=1 --directory=./mason
+  - ./mason/mason install clang++ 3.9.1
+  - export CXX=$(./mason/mason prefix clang++ 3.9.1)/bin/clang++
+
 test:
   override:
     - npm run lint
