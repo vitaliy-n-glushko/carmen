@@ -8,6 +8,10 @@ machine:
   - ./mason/mason install clang++ 3.9.1
   - export CXX=$(./mason/mason prefix clang++ 3.9.1)/bin/clang++
 
+dependencies:
+  override:
+    - npm install --build-from-source
+
 test:
   override:
     - npm run lint
