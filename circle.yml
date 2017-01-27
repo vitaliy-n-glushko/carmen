@@ -10,7 +10,7 @@ machine:
 
 dependencies:
   override:
-    - npm install --build-from-source
+    - npm install --build-from-source=dawg-cache
 
 test:
   override:
